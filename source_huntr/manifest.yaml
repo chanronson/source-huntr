@@ -1,0 +1,1373 @@
+version: 0.57.0
+type: DeclarativeSource
+check:
+  type: CheckStream
+  stream_names:
+    - members
+streams:
+  - type: DeclarativeStream
+    name: members
+    primary_key:
+      - id
+    schema_loader:
+      type: InlineSchemaLoader
+      schema:
+        $schema: http://json-schema.org/schema#
+        properties:
+          advisor:
+            properties:
+              createdAt:
+                type: number
+              email:
+                type: string
+              familyName:
+                type: string
+              fullName:
+                type: string
+              givenName:
+                type: string
+              id:
+                type: string
+              lastSeenAt:
+                type: number
+            type: object
+          createdAt:
+            type: number
+          email:
+            type: string
+          familyName:
+            type: string
+          fullName:
+            type: string
+          givenName:
+            type: string
+          id:
+            type: string
+          isActive:
+            type: boolean
+          lastSeenAt:
+            type: number
+          memberFieldValues:
+            items:
+              properties:
+                fieldId:
+                  type: string
+                value:
+                  type: string
+              type: object
+            type: array
+          memberFieldValuesKeyedById:
+            properties:
+              659f45d228e620033fd3dab0:
+                properties:
+                  fieldId:
+                    type: string
+                  value:
+                    type: string
+                type: object
+            type: object
+        type: object
+    retriever:
+      type: SimpleRetriever
+      requester:
+        type: HttpRequester
+        url_base: https://api.huntr.co/org
+        path: members/{{ stream_partition['id'] }}
+        http_method: GET
+        request_parameters: {}
+        request_headers: {}
+        authenticator:
+          type: BearerAuthenticator
+          api_token: '{{ config[''api_key''] }}'
+        request_body_json: {}
+      record_selector:
+        type: RecordSelector
+        extractor:
+          type: DpathExtractor
+          field_path:
+            - data
+      paginator:
+        type: DefaultPaginator
+        page_token_option:
+          type: RequestOption
+          inject_into: request_parameter
+          field_name: next
+        pagination_strategy:
+          type: CursorPagination
+          cursor_value: '{{ response.get("next", {}) }}'
+          stop_condition: '{{ not response.get("next", {}) }}'
+      partition_router: []
+  - type: DeclarativeStream
+    name: advisors
+    primary_key:
+      - id
+    schema_loader:
+      type: InlineSchemaLoader
+      schema:
+        $schema: http://json-schema.org/schema#
+        properties:
+          createdAt:
+            type: number
+          email:
+            type: string
+          familyName:
+            type: string
+          fullName:
+            type: string
+          givenName:
+            type: string
+          id:
+            type: string
+          lastSeenAt:
+            type: number
+        type: object
+    retriever:
+      type: SimpleRetriever
+      requester:
+        type: HttpRequester
+        url_base: https://api.huntr.co/org
+        path: advisors
+        http_method: GET
+        request_parameters: {}
+        request_headers: {}
+        authenticator:
+          type: BearerAuthenticator
+          api_token: '{{ config[''api_key''] }}'
+        request_body_json: {}
+      record_selector:
+        type: RecordSelector
+        extractor:
+          type: DpathExtractor
+          field_path:
+            - data
+      paginator:
+        type: DefaultPaginator
+        page_token_option:
+          type: RequestOption
+          inject_into: request_parameter
+          field_name: next
+        pagination_strategy:
+          type: CursorPagination
+          cursor_value: '{{ response.get("next", {}) }}'
+          stop_condition: '{{ not response.get("next", {}) }}'
+      partition_router: []
+  - type: DeclarativeStream
+    name: jobs
+    primary_key:
+      - id
+    schema_loader:
+      type: InlineSchemaLoader
+      schema:
+        $schema: http://json-schema.org/schema#
+        properties:
+          activities:
+            items:
+              properties:
+                completed:
+                  type: boolean
+                completedAt:
+                  type: number
+                createdAt:
+                  type: number
+                createdByWorkflow:
+                  type: boolean
+                id:
+                  type: string
+                note:
+                  type: string
+                startAt:
+                  type: number
+                title:
+                  type: string
+              type: object
+            type: array
+          applicationActivity:
+            properties:
+              completed:
+                type: boolean
+              completedAt:
+                type: number
+              createdAt:
+                type: number
+              createdByWorkflow:
+                type: boolean
+              id:
+                type: string
+              startAt:
+                type: number
+              title:
+                type: string
+            type: object
+          applicationDate:
+            type: number
+          boardId:
+            type: string
+          createdAt:
+            type: number
+          creatorMember:
+            properties:
+              createdAt:
+                type: number
+              email:
+                type: string
+              familyName:
+                type: string
+              fullName:
+                type: string
+              givenName:
+                type: string
+              id:
+                type: string
+              isActive:
+                type: boolean
+              lastSeenAt:
+                type: number
+              memberFieldValues:
+                type: array
+              memberFieldValuesKeyedById:
+                type: object
+            type: object
+          description:
+            type: string
+          employer:
+            properties:
+              description:
+                type: string
+              domain:
+                type: string
+              foundedYear:
+                type: number
+              id:
+                type: string
+              isPartner:
+                type: boolean
+              location:
+                type: string
+              name:
+                type: string
+            type: object
+          firstInterviewDate:
+            type: number
+          htmlDescription:
+            type: string
+          id:
+            type: string
+          interviewActivities:
+            items:
+              properties:
+                completed:
+                  type: boolean
+                createdAt:
+                  type: number
+                createdByWorkflow:
+                  type: boolean
+                id:
+                  type: string
+                startAt:
+                  type: number
+                title:
+                  type: string
+              type: object
+            type: array
+          jobPost:
+            properties:
+              createdAt:
+                type: number
+              htmlDescription:
+                type: string
+              id:
+                type: string
+              isRemote:
+                type: boolean
+              location:
+                properties:
+                  address:
+                    type: string
+                  country:
+                    type: string
+                  name:
+                    type: string
+                type: object
+              locations:
+                items:
+                  properties:
+                    address:
+                      type: string
+                    country:
+                      type: string
+                    name:
+                      type: string
+                  type: object
+                type: array
+              postDate:
+                type: number
+              sourceName:
+                type: string
+              title:
+                type: string
+              url:
+                type: string
+            type: object
+          list:
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+            type: object
+          listId:
+            type: string
+          location:
+            properties:
+              address:
+                type: string
+              id:
+                type: string
+              name:
+                type: string
+              placeId:
+                type: string
+              url:
+                type: string
+            type: object
+          member:
+            properties:
+              createdAt:
+                type: number
+              email:
+                type: string
+              familyName:
+                type: string
+              fullName:
+                type: string
+              givenName:
+                type: string
+              id:
+                type: string
+              isActive:
+                type: boolean
+              lastSeenAt:
+                type: number
+              memberFieldValues:
+                type: array
+              memberFieldValuesKeyedById:
+                type: object
+            type: object
+          offerActivity:
+            properties:
+              completed:
+                type: boolean
+              completedAt:
+                type: number
+              createdAt:
+                type: number
+              createdByWorkflow:
+                type: boolean
+              id:
+                type: string
+              startAt:
+                type: number
+              title:
+                type: string
+            type: object
+          offerDate:
+            type: number
+          ownerMember:
+            properties:
+              createdAt:
+                type: number
+              email:
+                type: string
+              familyName:
+                type: string
+              fullName:
+                type: string
+              givenName:
+                type: string
+              id:
+                type: string
+              isActive:
+                type: boolean
+              lastSeenAt:
+                type: number
+              memberFieldValues:
+                type: array
+              memberFieldValuesKeyedById:
+                type: object
+            type: object
+          secondInterviewDate:
+            type: number
+          title:
+            type: string
+          url:
+            type: string
+        type: object
+    retriever:
+      type: SimpleRetriever
+      requester:
+        type: HttpRequester
+        url_base: https://api.huntr.co/org
+        path: jobs
+        http_method: GET
+        request_parameters: {}
+        request_headers: {}
+        authenticator:
+          type: BearerAuthenticator
+          api_token: '{{ config[''api_key''] }}'
+        request_body_json: {}
+      record_selector:
+        type: RecordSelector
+        extractor:
+          type: DpathExtractor
+          field_path:
+            - data
+      paginator:
+        type: DefaultPaginator
+        page_token_option:
+          type: RequestOption
+          inject_into: request_parameter
+          field_name: next
+        pagination_strategy:
+          type: CursorPagination
+          cursor_value: '{{ response.get("next", {}) }}'
+          stop_condition: '{{ not response.get("next", {}) }}'
+      partition_router: []
+  - type: DeclarativeStream
+    name: job posts
+    primary_key:
+      - id
+    schema_loader:
+      type: InlineSchemaLoader
+      schema:
+        $schema: http://json-schema.org/draft-07/schema#
+        additionalProperties: true
+        properties: {}
+        type: object
+    retriever:
+      type: SimpleRetriever
+      requester:
+        type: HttpRequester
+        url_base: https://api.huntr.co/org
+        path: job-posts
+        http_method: GET
+        request_parameters: {}
+        request_headers: {}
+        authenticator:
+          type: BearerAuthenticator
+          api_token: '{{ config[''api_key''] }}'
+        request_body_json: {}
+      record_selector:
+        type: RecordSelector
+        extractor:
+          type: DpathExtractor
+          field_path:
+            - data
+      paginator:
+        type: DefaultPaginator
+        page_token_option:
+          type: RequestOption
+          inject_into: request_parameter
+          field_name: next
+        pagination_strategy:
+          type: CursorPagination
+          cursor_value: '{{ response.get("next", {}) }}'
+          stop_condition: '{{ not response.get("next", {}) }}'
+      partition_router: []
+  - type: DeclarativeStream
+    name: tags
+    primary_key:
+      - id
+    schema_loader:
+      type: InlineSchemaLoader
+      schema:
+        $schema: http://json-schema.org/draft-07/schema#
+        additionalProperties: true
+        properties: {}
+        type: object
+    retriever:
+      type: SimpleRetriever
+      requester:
+        type: HttpRequester
+        url_base: https://api.huntr.co/org
+        path: tags
+        http_method: GET
+        request_parameters: {}
+        request_headers: {}
+        authenticator:
+          type: BearerAuthenticator
+          api_token: '{{ config[''api_key''] }}'
+        request_body_json: {}
+      record_selector:
+        type: RecordSelector
+        extractor:
+          type: DpathExtractor
+          field_path:
+            - data
+      paginator:
+        type: NoPagination
+      partition_router: []
+  - type: DeclarativeStream
+    name: activities
+    primary_key:
+      - id
+    schema_loader:
+      type: InlineSchemaLoader
+      schema:
+        $schema: http://json-schema.org/schema#
+        properties:
+          activityCategory:
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+            type: object
+          completed:
+            type: boolean
+          completedAt:
+            type: number
+          createdAt:
+            type: number
+          createdByWorkflow:
+            type: boolean
+          creatorMember:
+            properties:
+              createdAt:
+                type: number
+              email:
+                type: string
+              familyName:
+                type: string
+              fullName:
+                type: string
+              givenName:
+                type: string
+              id:
+                type: string
+              isActive:
+                type: boolean
+              lastSeenAt:
+                type: number
+              memberFieldValues:
+                type: array
+              memberFieldValuesKeyedById:
+                type: object
+            type: object
+          employer:
+            properties:
+              description:
+                type: string
+              domain:
+                type: string
+              foundedYear:
+                type: number
+              id:
+                type: string
+              isPartner:
+                type: boolean
+              location:
+                type: string
+              name:
+                type: string
+            type: object
+          id:
+            type: string
+          job:
+            properties:
+              boardId:
+                type: string
+              createdAt:
+                type: number
+              id:
+                type: string
+              listId:
+                type: string
+              location:
+                properties:
+                  address:
+                    type: string
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  placeId:
+                    type: string
+                  url:
+                    type: string
+                type: object
+              title:
+                type: string
+              url:
+                type: string
+            type: object
+          jobPost:
+            properties:
+              createdAt:
+                type: number
+              id:
+                type: string
+              isRemote:
+                type: boolean
+              location:
+                properties:
+                  address:
+                    type: string
+                  country:
+                    type: string
+                  name:
+                    type: string
+                type: object
+              locations:
+                items:
+                  properties:
+                    address:
+                      type: string
+                    country:
+                      type: string
+                    name:
+                      type: string
+                  type: object
+                type: array
+              postDate:
+                type: number
+              sourceName:
+                type: string
+              title:
+                type: string
+              url:
+                type: string
+            type: object
+          note:
+            type: string
+          ownerMember:
+            properties:
+              createdAt:
+                type: number
+              email:
+                type: string
+              familyName:
+                type: string
+              fullName:
+                type: string
+              givenName:
+                type: string
+              id:
+                type: string
+              isActive:
+                type: boolean
+              lastSeenAt:
+                type: number
+              memberFieldValues:
+                type: array
+              memberFieldValuesKeyedById:
+                type: object
+            type: object
+          startAt:
+            type: number
+          title:
+            type: string
+        type: object
+    retriever:
+      type: SimpleRetriever
+      requester:
+        type: HttpRequester
+        url_base: https://api.huntr.co/org
+        path: activities
+        http_method: GET
+        request_parameters: {}
+        request_headers: {}
+        authenticator:
+          type: BearerAuthenticator
+          api_token: '{{ config[''api_key''] }}'
+        request_body_json: {}
+      record_selector:
+        type: RecordSelector
+        extractor:
+          type: DpathExtractor
+          field_path:
+            - data
+      paginator:
+        type: DefaultPaginator
+        page_token_option:
+          type: RequestOption
+          inject_into: request_parameter
+          field_name: next
+        pagination_strategy:
+          type: CursorPagination
+          cursor_value: '{{ response.get("next", {}) }}'
+          stop_condition: '{{ not response.get("next", {}) }}'
+      partition_router: []
+  - type: DeclarativeStream
+    name: activity categories
+    primary_key:
+      - id
+    schema_loader:
+      type: InlineSchemaLoader
+      schema:
+        $schema: http://json-schema.org/schema#
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+        type: object
+    retriever:
+      type: SimpleRetriever
+      requester:
+        type: HttpRequester
+        url_base: https://api.huntr.co/org
+        path: activity-categories
+        http_method: GET
+        request_parameters: {}
+        request_headers: {}
+        authenticator:
+          type: BearerAuthenticator
+          api_token: '{{ config[''api_key''] }}'
+        request_body_json: {}
+      record_selector:
+        type: RecordSelector
+        extractor:
+          type: DpathExtractor
+          field_path:
+            - data
+      paginator:
+        type: DefaultPaginator
+        page_token_option:
+          type: RequestOption
+          inject_into: request_parameter
+          field_name: next
+        pagination_strategy:
+          type: CursorPagination
+          cursor_value: '{{ response.get("next", {}) }}'
+          stop_condition: '{{ not response.get("next", {}) }}'
+      partition_router: []
+  - type: DeclarativeStream
+    name: actions
+    primary_key:
+      - id
+    schema_loader:
+      type: InlineSchemaLoader
+      schema:
+        $schema: http://json-schema.org/schema#
+        properties:
+          actionType:
+            type: string
+          activity:
+            properties:
+              completed:
+                type: boolean
+              completedAt:
+                type: number
+              createdAt:
+                type: number
+              createdByWorkflow:
+                type: boolean
+              id:
+                type: string
+              note:
+                type: string
+              startAt:
+                type: number
+              title:
+                type: string
+            type: object
+          activityCategory:
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+            type: object
+          activityId:
+            type: string
+          boardId:
+            type: string
+          candidate:
+            properties:
+              createdAt:
+                type: number
+              email:
+                type: string
+              firstName:
+                type: string
+              id:
+                type: string
+              lastName:
+                type: string
+              profiles:
+                type: object
+            type: object
+          candidateId:
+            type: string
+          createdAt:
+            type: number
+          createdByWorkflow:
+            type: boolean
+          creatorEmployerMember:
+            properties:
+              createdAt:
+                type: number
+              email:
+                type: string
+              familyName:
+                type: string
+              givenName:
+                type: string
+              id:
+                type: string
+            type: object
+          creatorMember:
+            properties:
+              createdAt:
+                type: number
+              email:
+                type: string
+              familyName:
+                type: string
+              fullName:
+                type: string
+              givenName:
+                type: string
+              id:
+                type: string
+              isActive:
+                type: boolean
+              lastSeenAt:
+                type: number
+              memberFieldValues:
+                items:
+                  properties:
+                    fieldId:
+                      type: string
+                    value:
+                      type: string
+                  type: object
+                type: array
+              memberFieldValuesKeyedById:
+                properties:
+                  659f45d228e620033fd3dab0:
+                    properties:
+                      fieldId:
+                        type: string
+                      value:
+                        type: string
+                    type: object
+                type: object
+            type: object
+          date:
+            type: number
+          employer:
+            properties:
+              domain:
+                type: string
+              id:
+                type: string
+              isPartner:
+                type: boolean
+              name:
+                type: string
+            type: object
+          employerId:
+            type: string
+          filters:
+            properties:
+              candidateListIds:
+                type: array
+              filters:
+                type: array
+            type: object
+          fromList:
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+            type: object
+          fromListId:
+            type: string
+          id:
+            type: string
+          job:
+            properties:
+              boardId:
+                type: string
+              createdAt:
+                type: number
+              description:
+                type: string
+              htmlDescription:
+                type: string
+              id:
+                type: string
+              listId:
+                type: string
+              location:
+                properties:
+                  address:
+                    type: string
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  placeId:
+                    type: string
+                  url:
+                    type: string
+                type: object
+              title:
+                type: string
+              url:
+                type: string
+            type: object
+          jobId:
+            type: string
+          jobPost:
+            properties:
+              createdAt:
+                type: number
+              htmlDescription:
+                type: string
+              id:
+                type: string
+              isRemote:
+                type: boolean
+              location:
+                properties:
+                  address:
+                    type: string
+                  country:
+                    type: string
+                  name:
+                    type: string
+                type: object
+              locations:
+                items:
+                  properties:
+                    address:
+                      type: string
+                    country:
+                      type: string
+                    name:
+                      type: string
+                  type: object
+                type: array
+              postDate:
+                type: number
+              sourceName:
+                type: string
+              title:
+                type: string
+              url:
+                type: string
+            type: object
+          jobPostId:
+            type: string
+          member:
+            properties:
+              createdAt:
+                type: number
+              email:
+                type: string
+              familyName:
+                type: string
+              fullName:
+                type: string
+              givenName:
+                type: string
+              id:
+                type: string
+              isActive:
+                type: boolean
+              lastSeenAt:
+                type: number
+              memberFieldValues:
+                items:
+                  properties:
+                    fieldId:
+                      type: string
+                    value:
+                      type: string
+                  type: object
+                type: array
+              memberFieldValuesKeyedById:
+                properties:
+                  659f45d228e620033fd3dab0:
+                    properties:
+                      fieldId:
+                        type: string
+                      value:
+                        type: string
+                    type: object
+                type: object
+            type: object
+          memberId:
+            type: string
+          organizationEmployerPartnership:
+            properties:
+              createdAt:
+                type: number
+              employerCanBrowseCandidates:
+                type: boolean
+              employerCanPostJobs:
+                type: boolean
+              employerId:
+                type: string
+              id:
+                type: string
+            type: object
+          organizationEmployerPartnershipId:
+            type: string
+          organizationEmployerRequest:
+            properties:
+              approvalStatus:
+                type: string
+              createdAt:
+                type: number
+              decidedAt:
+                type: number
+              fromEmail:
+                type: string
+              id:
+                type: string
+              utmTags:
+                type: object
+            type: object
+          organizationEmployerRequestId:
+            type: string
+          organizationInvitationId:
+            type: string
+          ownerMember:
+            properties:
+              createdAt:
+                type: number
+              email:
+                type: string
+              familyName:
+                type: string
+              fullName:
+                type: string
+              givenName:
+                type: string
+              id:
+                type: string
+              isActive:
+                type: boolean
+              lastSeenAt:
+                type: number
+              memberFieldValues:
+                items:
+                  properties:
+                    fieldId:
+                      type: string
+                    value:
+                      type: string
+                  type: object
+                type: array
+              memberFieldValuesKeyedById:
+                properties:
+                  659f45d228e620033fd3dab0:
+                    properties:
+                      fieldId:
+                        type: string
+                      value:
+                        type: string
+                    type: object
+                type: object
+            type: object
+          toList:
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+            type: object
+          toListId:
+            type: string
+          update:
+            properties:
+              _activityCategory:
+                type: string
+              color:
+                type: string
+              description:
+                type: string
+              isVisibleToAllEmployers:
+                type: boolean
+            type: object
+        type: object
+    retriever:
+      type: SimpleRetriever
+      requester:
+        type: HttpRequester
+        url_base: https://api.huntr.co/org
+        path: actions
+        http_method: GET
+        request_parameters: {}
+        request_headers: {}
+        authenticator:
+          type: BearerAuthenticator
+          api_token: '{{ config[''api_key''] }}'
+        request_body_json: {}
+      record_selector:
+        type: RecordSelector
+        extractor:
+          type: DpathExtractor
+          field_path:
+            - data
+      paginator:
+        type: DefaultPaginator
+        page_token_option:
+          type: RequestOption
+          inject_into: request_parameter
+          field_name: next
+        pagination_strategy:
+          type: CursorPagination
+          cursor_value: '{{ response.get("next", {}) }}'
+          stop_condition: '{{ not response.get("next", {}) }}'
+      partition_router: []
+  - type: DeclarativeStream
+    name: notes
+    primary_key:
+      - id
+    schema_loader:
+      type: InlineSchemaLoader
+      schema:
+        $schema: http://json-schema.org/draft-07/schema#
+        additionalProperties: true
+        properties: {}
+        type: object
+    retriever:
+      type: SimpleRetriever
+      requester:
+        type: HttpRequester
+        url_base: https://api.huntr.co/org
+        path: notes/members
+        http_method: GET
+        request_parameters: {}
+        request_headers: {}
+        authenticator:
+          type: BearerAuthenticator
+          api_token: '{{ config[''api_key''] }}'
+        request_body_json: {}
+      record_selector:
+        type: RecordSelector
+        extractor:
+          type: DpathExtractor
+          field_path:
+            - data
+      paginator:
+        type: DefaultPaginator
+        page_token_option:
+          type: RequestOption
+          inject_into: request_parameter
+          field_name: next
+        pagination_strategy:
+          type: CursorPagination
+          cursor_value: '{{ response.get("next", {}) }}'
+          stop_condition: '{{ not response.get("next", {}) }}'
+      partition_router: []
+  - type: DeclarativeStream
+    name: goals
+    primary_key:
+      - id
+    schema_loader:
+      type: InlineSchemaLoader
+      schema:
+        $schema: http://json-schema.org/draft-07/schema#
+        additionalProperties: true
+        properties: {}
+        type: object
+    retriever:
+      type: SimpleRetriever
+      requester:
+        type: HttpRequester
+        url_base: https://api.huntr.co/org
+        path: goals
+        http_method: GET
+        request_parameters: {}
+        request_headers: {}
+        authenticator:
+          type: BearerAuthenticator
+          api_token: '{{ config[''api_key''] }}'
+        request_body_json: {}
+      record_selector:
+        type: RecordSelector
+        extractor:
+          type: DpathExtractor
+          field_path:
+            - data
+      paginator:
+        type: DefaultPaginator
+        page_token_option:
+          type: RequestOption
+          inject_into: request_parameter
+          field_name: next
+        pagination_strategy:
+          type: CursorPagination
+          cursor_value: '{{ response.get("next", {}) }}'
+          stop_condition: '{{ not response.get("next", {}) }}'
+      partition_router: []
+  - type: DeclarativeStream
+    name: employers
+    primary_key:
+      - id
+    schema_loader:
+      type: InlineSchemaLoader
+      schema:
+        $schema: http://json-schema.org/schema#
+        properties:
+          applicationCount:
+            type: number
+          description:
+            type: string
+          domain:
+            type: string
+          id:
+            type: string
+          interviewCount:
+            type: number
+          isPartner:
+            type: boolean
+          jobCount:
+            type: number
+          location:
+            type: string
+          name:
+            type: string
+          offerCount:
+            type: number
+        type: object
+    retriever:
+      type: SimpleRetriever
+      requester:
+        type: HttpRequester
+        url_base: https://api.huntr.co/org
+        path: employers
+        http_method: GET
+        request_parameters: {}
+        request_headers: {}
+        authenticator:
+          type: BearerAuthenticator
+          api_token: '{{ config[''api_key''] }}'
+        request_body_json: {}
+      record_selector:
+        type: RecordSelector
+        extractor:
+          type: DpathExtractor
+          field_path:
+            - data
+      paginator:
+        type: DefaultPaginator
+        page_token_option:
+          type: RequestOption
+          inject_into: request_parameter
+          field_name: next
+        pagination_strategy:
+          type: CursorPagination
+          cursor_value: '{{ response.get("next", {}) }}'
+          stop_condition: '{{ not response.get("next", {}) }}'
+      partition_router: []
+  - type: DeclarativeStream
+    name: organization invitations
+    primary_key:
+      - id
+    schema_loader:
+      type: InlineSchemaLoader
+      schema:
+        $schema: http://json-schema.org/draft-07/schema#
+        additionalProperties: true
+        properties: {}
+        type: object
+    retriever:
+      type: SimpleRetriever
+      requester:
+        type: HttpRequester
+        url_base: https://api.huntr.co/org
+        path: organization-invitations
+        http_method: GET
+        request_parameters: {}
+        request_headers: {}
+        authenticator:
+          type: BearerAuthenticator
+          api_token: '{{ config[''api_key''] }}'
+        request_body_json: {}
+      record_selector:
+        type: RecordSelector
+        extractor:
+          type: DpathExtractor
+          field_path:
+            - data
+      paginator:
+        type: DefaultPaginator
+        page_token_option:
+          type: RequestOption
+          inject_into: request_parameter
+          field_name: next
+        pagination_strategy:
+          type: CursorPagination
+          cursor_value: '{{ response.get("next", {}) }}'
+          stop_condition: '{{ not response.get("next", {}) }}'
+      partition_router: []
+  - type: DeclarativeStream
+    name: member fields
+    primary_key:
+      - id
+    schema_loader:
+      type: InlineSchemaLoader
+      schema:
+        $schema: http://json-schema.org/draft-07/schema#
+        additionalProperties: true
+        properties: {}
+        type: object
+    retriever:
+      type: SimpleRetriever
+      requester:
+        type: HttpRequester
+        url_base: https://api.huntr.co/org
+        path: member-fields
+        http_method: GET
+        request_parameters: {}
+        request_headers: {}
+        authenticator:
+          type: BearerAuthenticator
+          api_token: '{{ config[''api_key''] }}'
+        request_body_json: {}
+      record_selector:
+        type: RecordSelector
+        extractor:
+          type: DpathExtractor
+          field_path:
+            - data
+      paginator:
+        type: NoPagination
+      partition_router: []
+spec:
+  connection_specification:
+    $schema: http://json-schema.org/draft-07/schema#
+    type: object
+    required:
+      - api_key
+    properties:
+      api_key:
+        type: string
+        title: API Key
+        airbyte_secret: true
+        order: 0
+    additionalProperties: true
+  documentation_url: https://docs.airbyte.com/integrations/sources/huntr
+  type: Spec
+metadata:
+  autoImportSchema:
+    members: false
+    advisors: true
+    jobs: true
+    job posts: true
+    tags: true
+    activities: true
+    activity categories: true
+    actions: true
+    notes: true
+    goals: true
+    employers: true
+    organization invitations: true
+    member fields: true

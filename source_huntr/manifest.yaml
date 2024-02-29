@@ -2290,9 +2290,27 @@ streams:
     schema_loader:
       type: InlineSchemaLoader
       schema:
-        $schema: http://json-schema.org/draft-07/schema#
-        additionalProperties: true
-        properties: {}
+        $schema: http://json-schema.org/schema#
+        properties:
+          id:
+            type: string
+          isDefault:
+            type: boolean
+          listNames:
+            items:
+              type: string
+            type: array
+          listTemplates:
+            items:
+              properties:
+                id:
+                  type: string
+                name:
+                  type: string
+              type: object
+            type: array
+          name:
+            type: string
         type: object
     retriever:
       type: SimpleRetriever

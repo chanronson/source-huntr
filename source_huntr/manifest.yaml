@@ -1,4 +1,4 @@
-version: 0.57.0
+version: 0.65.0
 type: DeclarativeSource
 check:
   type: CheckStream
@@ -223,8 +223,32 @@ streams:
               lastSeenAt:
                 type: number
               memberFieldValues:
+                items:
+                  properties:
+                    fieldId:
+                      type: string
+                    value:
+                      type:
+                        - array
+                        - string
+                  type: object
                 type: array
               memberFieldValuesKeyedById:
+                properties:
+                  659f45d228e620033fd3dab0:
+                    properties:
+                      fieldId:
+                        type: string
+                      value:
+                        type: string
+                    type: object
+                  65e0a8969530d200772c3e9f:
+                    properties:
+                      fieldId:
+                        type: string
+                      value:
+                        type: array
+                    type: object
                 type: object
             type: object
           description:
@@ -273,17 +297,25 @@ streams:
             properties:
               createdAt:
                 type: number
+              employerId:
+                type: string
               htmlDescription:
                 type: string
               id:
                 type: string
               isRemote:
                 type: boolean
+              jobType:
+                type: string
               location:
                 properties:
                   address:
                     type: string
                   country:
+                    type: string
+                  lat:
+                    type: string
+                  lng:
                     type: string
                   name:
                     type: string
@@ -294,6 +326,10 @@ streams:
                     address:
                       type: string
                     country:
+                      type: string
+                    lat:
+                      type: string
+                    lng:
                       type: string
                     name:
                       type: string
@@ -323,6 +359,10 @@ streams:
                 type: string
               id:
                 type: string
+              lat:
+                type: string
+              lng:
+                type: string
               name:
                 type: string
               placeId:
@@ -349,9 +389,52 @@ streams:
               lastSeenAt:
                 type: number
               memberFieldValues:
+                items:
+                  properties:
+                    fieldId:
+                      type: string
+                    value:
+                      type:
+                        - array
+                        - string
+                  type: object
                 type: array
               memberFieldValuesKeyedById:
+                properties:
+                  659f45d228e620033fd3dab0:
+                    properties:
+                      fieldId:
+                        type: string
+                      value:
+                        type: string
+                    type: object
+                  65e0a8969530d200772c3e9f:
+                    properties:
+                      fieldId:
+                        type: string
+                      value:
+                        type: array
+                    type: object
                 type: object
+            type: object
+          offerAcceptedActivity:
+            properties:
+              completed:
+                type: boolean
+              completedAt:
+                type: number
+              createdAt:
+                type: number
+              createdByWorkflow:
+                type: boolean
+              id:
+                type: string
+              note:
+                type: string
+              startAt:
+                type: number
+              title:
+                type: string
             type: object
           offerActivity:
             properties:
@@ -364,6 +447,8 @@ streams:
               createdByWorkflow:
                 type: boolean
               id:
+                type: string
+              note:
                 type: string
               startAt:
                 type: number
@@ -391,8 +476,32 @@ streams:
               lastSeenAt:
                 type: number
               memberFieldValues:
+                items:
+                  properties:
+                    fieldId:
+                      type: string
+                    value:
+                      type:
+                        - array
+                        - string
+                  type: object
                 type: array
               memberFieldValuesKeyedById:
+                properties:
+                  659f45d228e620033fd3dab0:
+                    properties:
+                      fieldId:
+                        type: string
+                      value:
+                        type: string
+                    type: object
+                  65e0a8969530d200772c3e9f:
+                    properties:
+                      fieldId:
+                        type: string
+                      value:
+                        type: array
+                    type: object
                 type: object
             type: object
           secondInterviewDate:
@@ -439,9 +548,85 @@ streams:
     schema_loader:
       type: InlineSchemaLoader
       schema:
-        $schema: http://json-schema.org/draft-07/schema#
-        additionalProperties: true
-        properties: {}
+        $schema: http://json-schema.org/schema#
+        properties:
+          createdAt:
+            type: number
+          employer:
+            properties:
+              description:
+                type: string
+              domain:
+                type: string
+              foundedYear:
+                type: number
+              id:
+                type: string
+              isPartner:
+                type: boolean
+              location:
+                type: string
+              name:
+                type: string
+            type: object
+          employerId:
+            type: string
+          htmlDescription:
+            type: string
+          id:
+            type: string
+          isRemote:
+            type: boolean
+          jobPostStatus:
+            properties:
+              name:
+                type: string
+            type: object
+          jobType:
+            type: string
+          location:
+            properties:
+              address:
+                type: string
+              lat:
+                type: string
+              lng:
+                type: string
+              name:
+                type: string
+            type: object
+          locations:
+            items:
+              properties:
+                address:
+                  type: string
+                lat:
+                  type: string
+                lng:
+                  type: string
+                name:
+                  type: string
+              type: object
+            type: array
+          postDate:
+            type: number
+          sourceName:
+            type: string
+          tags:
+            items:
+              properties:
+                color:
+                  type: string
+                id:
+                  type: string
+                name:
+                  type: string
+              type: object
+            type: array
+          title:
+            type: string
+          url:
+            type: string
         type: object
     retriever:
       type: SimpleRetriever
@@ -480,9 +665,18 @@ streams:
     schema_loader:
       type: InlineSchemaLoader
       schema:
-        $schema: http://json-schema.org/draft-07/schema#
-        additionalProperties: true
-        properties: {}
+        $schema: http://json-schema.org/schema#
+        properties:
+          color:
+            type: string
+          id:
+            type: string
+          name:
+            type: string
+          targetObjects:
+            items:
+              type: string
+            type: array
         type: object
     retriever:
       type: SimpleRetriever
@@ -501,8 +695,7 @@ streams:
         type: RecordSelector
         extractor:
           type: DpathExtractor
-          field_path:
-            - data
+          field_path: []
       paginator:
         type: NoPagination
       partition_router: []
@@ -549,8 +742,32 @@ streams:
               lastSeenAt:
                 type: number
               memberFieldValues:
+                items:
+                  properties:
+                    fieldId:
+                      type: string
+                    value:
+                      type:
+                        - array
+                        - string
+                  type: object
                 type: array
               memberFieldValuesKeyedById:
+                properties:
+                  659f45d228e620033fd3dab0:
+                    properties:
+                      fieldId:
+                        type: string
+                      value:
+                        type: string
+                    type: object
+                  65e0a8969530d200772c3e9f:
+                    properties:
+                      fieldId:
+                        type: string
+                      value:
+                        type: array
+                    type: object
                 type: object
             type: object
           employer:
@@ -588,6 +805,10 @@ streams:
                     type: string
                   id:
                     type: string
+                  lat:
+                    type: string
+                  lng:
+                    type: string
                   name:
                     type: string
                   placeId:
@@ -604,15 +825,23 @@ streams:
             properties:
               createdAt:
                 type: number
+              employerId:
+                type: string
               id:
                 type: string
               isRemote:
                 type: boolean
+              jobType:
+                type: string
               location:
                 properties:
                   address:
                     type: string
                   country:
+                    type: string
+                  lat:
+                    type: string
+                  lng:
                     type: string
                   name:
                     type: string
@@ -623,6 +852,10 @@ streams:
                     address:
                       type: string
                     country:
+                      type: string
+                    lat:
+                      type: string
+                    lng:
                       type: string
                     name:
                       type: string
@@ -658,8 +891,32 @@ streams:
               lastSeenAt:
                 type: number
               memberFieldValues:
+                items:
+                  properties:
+                    fieldId:
+                      type: string
+                    value:
+                      type:
+                        - array
+                        - string
+                  type: object
                 type: array
               memberFieldValuesKeyedById:
+                properties:
+                  659f45d228e620033fd3dab0:
+                    properties:
+                      fieldId:
+                        type: string
+                      value:
+                        type: string
+                    type: object
+                  65e0a8969530d200772c3e9f:
+                    properties:
+                      fieldId:
+                        type: string
+                      value:
+                        type: array
+                    type: object
                 type: object
             type: object
           startAt:
@@ -795,6 +1052,9 @@ streams:
               lastName:
                 type: string
               profiles:
+                properties:
+                  linkedin:
+                    type: string
                 type: object
             type: object
           candidateId:
@@ -856,6 +1116,23 @@ streams:
             type: object
           date:
             type: number
+          document:
+            properties:
+              documentCategoryName:
+                type: string
+              extension:
+                type: string
+              id:
+                type: string
+              name:
+                type: string
+              title:
+                type: string
+              url:
+                type: string
+            type: object
+          documentId:
+            type: string
           employer:
             properties:
               domain:
@@ -885,6 +1162,161 @@ streams:
             type: object
           fromListId:
             type: string
+          goal:
+            properties:
+              description:
+                type: string
+              enrollmentRecurrence:
+                properties:
+                  byHour:
+                    type: array
+                  byMinute:
+                    type: array
+                  byMonth:
+                    type: array
+                  byMonthDay:
+                    items:
+                      type: number
+                    type: array
+                  bySecond:
+                    type: array
+                  byWeekDay:
+                    items:
+                      type: number
+                    type: array
+                  byWeekNumber:
+                    type: array
+                  byYearDay:
+                    type: array
+                  frequency:
+                    type: number
+                  interval:
+                    type: number
+                  start:
+                    type: string
+                type: object
+              enrollmentStartDate:
+                type: number
+              enrollmentTriggers:
+                items:
+                  properties:
+                    actionType:
+                      type: string
+                    conditions:
+                      type: array
+                  type: object
+                type: array
+              enrollmentType:
+                type: string
+              goalRecurrence:
+                properties:
+                  byHour:
+                    type: array
+                  byMinute:
+                    type: array
+                  byMonth:
+                    type: array
+                  byMonthDay:
+                    type: array
+                  bySecond:
+                    type: array
+                  byWeekDay:
+                    type: array
+                  byWeekNumber:
+                    type: array
+                  byYearDay:
+                    type: array
+                  count:
+                    type: number
+                  frequency:
+                    type: number
+                  interval:
+                    type: number
+                  start:
+                    type: string
+                  timezone:
+                    type: string
+                type: object
+              id:
+                type: string
+              instructions:
+                type: string
+              name:
+                type: string
+              objectiveEntity:
+                type: string
+              objectiveEntityConditions:
+                items:
+                  properties:
+                    key:
+                      type: string
+                    operator:
+                      type: string
+                    value:
+                      anyOf:
+                        - type: boolean
+                        - items:
+                            type: string
+                          type: array
+                  type: object
+                type: array
+              objectiveNumericTarget:
+                type: number
+              objectiveTargetType:
+                type: string
+              oneTimeGoalDueDaysCount:
+                type: number
+              scheduleType:
+                type: string
+              status:
+                type: string
+            type: object
+          goalEnrollment:
+            properties:
+              goalId:
+                type: string
+              id:
+                type: string
+              startingGoalIntervalId:
+                type: string
+              status:
+                type: string
+            type: object
+          goalProgress:
+            properties:
+              end:
+                type: number
+              goalEnrollmentId:
+                type: string
+              goalId:
+                type: string
+              goalIntervalId:
+                type: string
+              id:
+                type: string
+              objectiveActionIds:
+                type: array
+              objectiveActivityIds:
+                items:
+                  type: string
+                type: array
+              objectiveContactIds:
+                type: array
+              objectiveEntity:
+                type: string
+              objectiveJobIds:
+                type: array
+              objectiveNumericCount:
+                type: number
+              objectiveNumericTarget:
+                type: number
+              progressIndex:
+                type: number
+              start:
+                type: number
+              status:
+                type: string
+            type: object
           id:
             type: string
           job:
@@ -905,7 +1337,9 @@ streams:
                 properties:
                   address:
                     type: string
-                  id:
+                  lat:
+                    type: string
+                  lng:
                     type: string
                   name:
                     type: string
@@ -925,17 +1359,28 @@ streams:
             properties:
               createdAt:
                 type: number
+              employerId:
+                type: string
               htmlDescription:
                 type: string
               id:
                 type: string
               isRemote:
                 type: boolean
+              jobPostStatus:
+                properties:
+                  name:
+                    type: string
+                type: object
+              jobType:
+                type: string
               location:
                 properties:
                   address:
                     type: string
-                  country:
+                  lat:
+                    type: string
+                  lng:
                     type: string
                   name:
                     type: string
@@ -945,7 +1390,9 @@ streams:
                   properties:
                     address:
                       type: string
-                    country:
+                    lat:
+                      type: string
+                    lng:
                       type: string
                     name:
                       type: string
@@ -962,6 +1409,36 @@ streams:
             type: object
           jobPostId:
             type: string
+          jobs:
+            items:
+              properties:
+                boardId:
+                  type: string
+                createdAt:
+                  type: number
+                htmlDescription:
+                  type: string
+                id:
+                  type: string
+                listId:
+                  type: string
+                location:
+                  properties:
+                    address:
+                      type: string
+                    lat:
+                      type: string
+                    lng:
+                      type: string
+                    name:
+                      type: string
+                  type: object
+                title:
+                  type: string
+                url:
+                  type: string
+              type: object
+            type: array
           member:
             properties:
               createdAt:
@@ -986,7 +1463,9 @@ streams:
                     fieldId:
                       type: string
                     value:
-                      type: string
+                      type:
+                        - array
+                        - string
                   type: object
                 type: array
               memberFieldValuesKeyedById:
@@ -998,41 +1477,29 @@ streams:
                       value:
                         type: string
                     type: object
+                  65e0a8969530d200772c3e9f:
+                    properties:
+                      fieldId:
+                        type: string
+                      value:
+                        type: array
+                    type: object
                 type: object
             type: object
           memberId:
             type: string
-          organizationEmployerPartnership:
+          note:
             properties:
-              createdAt:
-                type: number
-              employerCanBrowseCandidates:
-                type: boolean
-              employerCanPostJobs:
-                type: boolean
-              employerId:
+              htmlText:
                 type: string
               id:
                 type: string
+              memberId:
+                type: string
+              text:
+                type: string
             type: object
-          organizationEmployerPartnershipId:
-            type: string
-          organizationEmployerRequest:
-            properties:
-              approvalStatus:
-                type: string
-              createdAt:
-                type: number
-              decidedAt:
-                type: number
-              fromEmail:
-                type: string
-              id:
-                type: string
-              utmTags:
-                type: object
-            type: object
-          organizationEmployerRequestId:
+          noteId:
             type: string
           organizationInvitationId:
             type: string
@@ -1060,7 +1527,9 @@ streams:
                     fieldId:
                       type: string
                     value:
-                      type: string
+                      type:
+                        - array
+                        - string
                   type: object
                 type: array
               memberFieldValuesKeyedById:
@@ -1071,6 +1540,13 @@ streams:
                         type: string
                       value:
                         type: string
+                    type: object
+                  65e0a8969530d200772c3e9f:
+                    properties:
+                      fieldId:
+                        type: string
+                      value:
+                        type: array
                     type: object
                 type: object
             type: object
@@ -1085,14 +1561,291 @@ streams:
             type: string
           update:
             properties:
-              _activityCategory:
+              _backgroundPhoto:
                 type: string
-              color:
+              _industryPreferences:
+                items:
+                  type: string
+                type: array
+              _objectiveActivities:
                 type: string
-              description:
+              _primaryRolePreference:
+                type: string
+              _profilePhoto:
+                type: string
+              _rolePreferences:
+                items:
+                  type: string
+                type: array
+              _skills:
+                items:
+                  type: string
+                type: array
+              backgroundPhotoUrl:
+                type: string
+              bio:
+                type: string
+              currentLocation:
+                properties:
+                  _administrativeRegions:
+                    items:
+                      type: string
+                    type: array
+                  _country:
+                    type: string
+                  address:
+                    type: string
+                  administrativeRegionsNames:
+                    items:
+                      type: string
+                    type: array
+                  country:
+                    type: string
+                  geohash:
+                    type: string
+                  lat:
+                    type: number
+                  lng:
+                    type: number
+                  name:
+                    type: string
+                  point:
+                    properties:
+                      coordinates:
+                        items:
+                          type: number
+                        type: array
+                      type:
+                        type: string
+                    type: object
+                type: object
+              customFieldValues:
+                properties:
+                  _field:
+                    type: string
+                  value:
+                    items:
+                      type: string
+                    type: array
+                type: object
+              educations:
+                items:
+                  properties:
+                    _degreeType:
+                      type: string
+                    achievements:
+                      type: array
+                    degreeTypeName:
+                      type: string
+                    fieldOfStudyName:
+                      type: string
+                    graduationAt:
+                      type: string
+                    schoolName:
+                      type: string
+                    startedAt:
+                      type: string
+                  type: object
+                type: array
+              expectedSalary:
+                properties:
+                  actual:
+                    type: number
+                  currency:
+                    type: string
+                  interval:
+                    type: string
+                type: object
+              experiencePreference:
+                type: string
+              headline:
+                type: string
+              htmlBio:
+                type: string
+              industryPreferencesNames:
+                items:
+                  type: string
+                type: array
+              instructions:
                 type: string
               isVisibleToAllEmployers:
                 type: boolean
+              jobTypePreferences:
+                items:
+                  type: string
+                type: array
+              keywords:
+                items:
+                  properties:
+                    jobMatches:
+                      items:
+                        properties:
+                          text:
+                            type: string
+                        type: object
+                      type: array
+                    text:
+                      type: string
+                    type:
+                      type: string
+                  type: object
+                type: array
+              legallyAuthorizedToWorkInUsa:
+                type: boolean
+              links:
+                items:
+                  properties:
+                    _id:
+                      type: string
+                    description:
+                      type: string
+                    title:
+                      type: string
+                    url:
+                      type: string
+                  type: object
+                type: array
+              locationPreferences:
+                items:
+                  properties:
+                    _administrativeRegions:
+                      items:
+                        type: string
+                      type: array
+                    _city:
+                      type: string
+                    _country:
+                      type: string
+                    address:
+                      type: string
+                    administrativeRegionsNames:
+                      items:
+                        type: string
+                      type: array
+                    country:
+                      type: string
+                    geohash:
+                      type: string
+                    lat:
+                      type: number
+                    lng:
+                      type: number
+                    name:
+                      type: string
+                    point:
+                      properties:
+                        coordinates:
+                          items:
+                            type: number
+                          type: array
+                        type:
+                          type: string
+                      type: object
+                  type: object
+                type: array
+              name:
+                type: string
+              objectiveNumericCount:
+                type: number
+              primaryRoleExperienceYears:
+                type: number
+              primaryRoleExperienceYearsText:
+                type: string
+              primaryRolePreferenceName:
+                type: string
+              profilePhotoUrl:
+                type: string
+              profiles:
+                properties:
+                  linkedin:
+                    type: string
+                type: object
+              rolePreferencesNames:
+                items:
+                  type: string
+                type: array
+              sentences:
+                items:
+                  properties:
+                    label:
+                      type: string
+                    probability:
+                      type: number
+                    sentenceIndex:
+                      type: number
+                    sentenceType:
+                      type: string
+                    text:
+                      type: string
+                  type: object
+                type: array
+              skillNames:
+                items:
+                  type: string
+                type: array
+              startAt:
+                type: string
+              status:
+                type: string
+              totalWorkExperienceYears:
+                type: number
+              totalWorkExperienceYearsText:
+                type: string
+              willingToRelocate:
+                type: boolean
+              workExperiences:
+                items:
+                  properties:
+                    achievements:
+                      items:
+                        type: string
+                      type: array
+                    employerName:
+                      type: string
+                    endedAt:
+                      type: string
+                    isCurrentPosition:
+                      type: boolean
+                    jobSummary:
+                      type: string
+                    jobTitle:
+                      type: string
+                    location:
+                      properties:
+                        _administrativeRegions:
+                          items:
+                            type: string
+                          type: array
+                        _country:
+                          type: string
+                        address:
+                          type: string
+                        administrativeRegionsNames:
+                          items:
+                            type: string
+                          type: array
+                        geohash:
+                          type: string
+                        lat:
+                          type: string
+                        lng:
+                          type: string
+                        name:
+                          type: string
+                        point:
+                          properties:
+                            coordinates:
+                              items:
+                                type: string
+                              type: array
+                            type:
+                              type: string
+                          type: object
+                      type: object
+                    startedAt:
+                      type: string
+                  type: object
+                type: array
             type: object
         type: object
     retriever:
@@ -1132,9 +1885,16 @@ streams:
     schema_loader:
       type: InlineSchemaLoader
       schema:
-        $schema: http://json-schema.org/draft-07/schema#
-        additionalProperties: true
-        properties: {}
+        $schema: http://json-schema.org/schema#
+        properties:
+          htmlText:
+            type: string
+          id:
+            type: string
+          memberId:
+            type: string
+          text:
+            type: string
         type: object
     retriever:
       type: SimpleRetriever
@@ -1173,9 +1933,131 @@ streams:
     schema_loader:
       type: InlineSchemaLoader
       schema:
-        $schema: http://json-schema.org/draft-07/schema#
-        additionalProperties: true
-        properties: {}
+        $schema: http://json-schema.org/schema#
+        properties:
+          description:
+            type: string
+          enrollmentRecurrence:
+            properties:
+              byHour:
+                type: array
+              byMinute:
+                type: array
+              byMonth:
+                type: array
+              byMonthDay:
+                items:
+                  type: number
+                type: array
+              bySecond:
+                type: array
+              byWeekDay:
+                items:
+                  type: number
+                type: array
+              byWeekNumber:
+                type: array
+              byYearDay:
+                type: array
+              frequency:
+                type: number
+              interval:
+                type: number
+              start:
+                type: string
+            type: object
+          enrollmentStartDate:
+            type: number
+          enrollmentTriggers:
+            items:
+              properties:
+                actionType:
+                  type: string
+                conditions:
+                  type: array
+              type: object
+            type: array
+          enrollmentType:
+            type: string
+          firstGoalInterval:
+            properties:
+              end:
+                type: number
+              goalId:
+                type: string
+              id:
+                type: string
+              intervalIndex:
+                type: number
+              nextIntervalId:
+                type: string
+              start:
+                type: number
+              timezone:
+                type: string
+            type: object
+          goalRecurrence:
+            properties:
+              byHour:
+                type: array
+              byMinute:
+                type: array
+              byMonth:
+                type: array
+              byMonthDay:
+                type: array
+              bySecond:
+                type: array
+              byWeekDay:
+                type: array
+              byWeekNumber:
+                type: array
+              byYearDay:
+                type: array
+              count:
+                type: number
+              frequency:
+                type: number
+              interval:
+                type: number
+              start:
+                type: string
+              timezone:
+                type: string
+            type: object
+          id:
+            type: string
+          instructions:
+            type: string
+          name:
+            type: string
+          objectiveEntity:
+            type: string
+          objectiveEntityConditions:
+            items:
+              properties:
+                key:
+                  type: string
+                operator:
+                  type: string
+                value:
+                  anyOf:
+                    - type: boolean
+                    - items:
+                        type: string
+                      type: array
+              type: object
+            type: array
+          objectiveNumericTarget:
+            type: number
+          objectiveTargetType:
+            type: string
+          oneTimeGoalDueDaysCount:
+            type: number
+          scheduleType:
+            type: string
+          status:
+            type: string
         type: object
     retriever:
       type: SimpleRetriever
@@ -1218,8 +2100,6 @@ streams:
         properties:
           applicationCount:
             type: number
-          description:
-            type: string
           domain:
             type: string
           id:
@@ -1230,8 +2110,6 @@ streams:
             type: boolean
           jobCount:
             type: number
-          location:
-            type: string
           name:
             type: string
           offerCount:
@@ -1274,9 +2152,60 @@ streams:
     schema_loader:
       type: InlineSchemaLoader
       schema:
-        $schema: http://json-schema.org/draft-07/schema#
-        additionalProperties: true
-        properties: {}
+        $schema: http://json-schema.org/schema#
+        properties:
+          boardName:
+            type: string
+          boardTemplate:
+            properties:
+              id:
+                type: string
+              isDefault:
+                type: boolean
+              listNames:
+                items:
+                  type: string
+                type: array
+              listTemplates:
+                items:
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                  type: object
+                type: array
+              name:
+                type: string
+            type: object
+          createdAt:
+            type: number
+          id:
+            type: string
+          memberFieldValues:
+            items:
+              properties:
+                fieldId:
+                  type: string
+                value:
+                  type: string
+              type: object
+            type: array
+          to:
+            properties:
+              createdAt:
+                type: number
+              email:
+                type: string
+              familyName:
+                type: string
+              givenName:
+                type: string
+              id:
+                type: string
+            type: object
+          toEmail:
+            type: string
         type: object
     retriever:
       type: SimpleRetriever
@@ -1315,9 +2244,22 @@ streams:
     schema_loader:
       type: InlineSchemaLoader
       schema:
-        $schema: http://json-schema.org/draft-07/schema#
-        additionalProperties: true
-        properties: {}
+        $schema: http://json-schema.org/schema#
+        properties:
+          choices:
+            items:
+              type: string
+            type: array
+          employerPartnerCanView:
+            type: boolean
+          fieldType:
+            type: string
+          id:
+            type: string
+          jobSeekerCanEdit:
+            type: boolean
+          name:
+            type: string
         type: object
     retriever:
       type: SimpleRetriever
@@ -1341,6 +2283,47 @@ streams:
       paginator:
         type: NoPagination
       partition_router: []
+  - type: DeclarativeStream
+    name: board templates
+    primary_key:
+      - id
+    schema_loader:
+      type: InlineSchemaLoader
+      schema:
+        $schema: http://json-schema.org/draft-07/schema#
+        additionalProperties: true
+        properties: {}
+        type: object
+    retriever:
+      type: SimpleRetriever
+      requester:
+        type: HttpRequester
+        url_base: https://api.huntr.co/org
+        path: board-templates
+        http_method: GET
+        request_parameters: {}
+        request_headers: {}
+        authenticator:
+          type: BearerAuthenticator
+          api_token: '{{ config[''api_key''] }}'
+        request_body_json: {}
+      record_selector:
+        type: RecordSelector
+        extractor:
+          type: DpathExtractor
+          field_path:
+            - data
+      paginator:
+        type: DefaultPaginator
+        page_token_option:
+          type: RequestOption
+          inject_into: request_parameter
+          field_name: next
+        pagination_strategy:
+          type: CursorPagination
+          cursor_value: '{{ response.get("next", {}) }}'
+          stop_condition: '{{ not response.get("next", {}) }}'
+      partition_router: []
 spec:
   connection_specification:
     $schema: http://json-schema.org/draft-07/schema#
@@ -1354,7 +2337,6 @@ spec:
         airbyte_secret: true
         order: 0
     additionalProperties: true
-  documentation_url: https://docs.airbyte.com/integrations/sources/huntr
   type: Spec
 metadata:
   autoImportSchema:
@@ -1371,3 +2353,4 @@ metadata:
     employers: true
     organization invitations: true
     member fields: true
+    board templates: false

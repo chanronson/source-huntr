@@ -1860,6 +1860,15 @@ streams:
         authenticator:
           type: BearerAuthenticator
           api_token: '{{ config[''api_key''] }}'
+        error_handler:
+          type: CompositeErrorHandler
+          error_handlers:
+            - type: DefaultErrorHandler
+              response_filters:
+                - type: HttpResponseFilter
+                  action: IGNORE
+                  http_codes:
+                    - 400
         request_body_json: {}
       record_selector:
         type: RecordSelector
